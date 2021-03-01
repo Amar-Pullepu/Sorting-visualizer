@@ -1,14 +1,26 @@
-var arr = new Array(300);
-var sleepTime = -23.9877 +(106022800 - -23.9877)/(1+Math.pow(arr.length/0.00001042917, 0.9375706))
-//var sleepTime = 5000	
-function drawMaterial() {
+var arr;
+var sleepTime;
+
+var visualizer;
+
+function reload(){
+	location.reload();
+}
+
+function drawMaterial(len) {
+	document.getElementById("bodyContainer").innerHTML = "";
+	if(len === -1)
+	len = document.getElementById("changeSize").value;
+	arr = new Array(parseInt(len))
+	sleepTimer = (106092800 - -23.9877)/(1+Math.pow(arr.length/0.00001042917, 0.9375706))
 	var width = -2.494404 + (40784360 - -2.494404)/(1 + Math.pow(arr.length/0.0000106484, 0.9375706))
+	console.log(sleepTimer)
 	for (var itr = 0; itr < arr.length; itr++) {
 		arr[itr] = (Math.random() * 500)^0;
 		document.getElementById("bodyContainer").innerHTML += '<div id="'+itr+'" style="height: '+arr[itr]+'px; width: '+width+'px; margin-left: auto; margin-right: auto; background-color: rgba(66, 134, 244, 0.8); color: transparent; font-size: 8px;"/>';
 	}
 }
-drawMaterial();
+drawMaterial(150);
 
 function shuffle(x, y){
 	var l = document.getElementById(x).style.height;
@@ -32,7 +44,7 @@ function changeColor(idx, color){
 		document.getElementById(idx).style.backgroundColor = color;
 	}
 	catch(err) {
-	  console.log(idx);
+	  console.log(idx+" "+color);
 	}
 }
 
@@ -41,6 +53,7 @@ function sleep(ms) {
 }
 
 async function insertionSort(){
+	document.getElementById("sortTitle").innerHTML = "Insertion Sort"
 	var n = arr.length;
     for (var i = 1; i < n; ++i) {
 		var key = arr[i];
@@ -62,6 +75,7 @@ async function insertionSort(){
 }
 
 async function selectionSort(){
+	document.getElementById("sortTitle").innerHTML = "Selection Sort"
 	var n = arr.length;
     
 	for (var i = 0; i < n; i++) 
@@ -92,8 +106,8 @@ async function selectionSort(){
     }
 }
 
-async function bubbleSort() 
-{ 
+async function bubbleSort() {
+	document.getElementById("sortTitle").innerHTML = "Bubble Sort" 
     var n = arr.length; 
     for (var i = 0; i < n; i++) {
     	changeColor(0, "rgba(66, 245, 167, 0.8)")
@@ -181,21 +195,22 @@ async function divide(start, end) {
 }
 
 async function mergeSort(){
+	document.getElementById("sortTitle").innerHTML = "Merge Sort"
 	await divide(0, arr.length-1)
 }
 
 async function partition(low, high){
 	if(low === high){
-		changeColor(j, "rgba(252, 219, 3, 0.8)")
+		changeColor(low, "rgba(252, 219, 3, 0.8)")
 		await sleep(sleepTime)
-		changeColor(i, "rgba(66, 134, 244, 0.8)")
+		changeColor(high, "rgba(66, 134, 244, 0.8)")
 	}
 	var pivot = arr[high]; // pivot 
     var i = (low - 1); // Index of smaller element and indicates the right position of pivot found so far
  	for (var j = low; j <= high - 1; j++) 
     { 
-    	changeColor(j, "rgba(252, 219, 3, 0.8)")
-        // If current element is smaller than the pivot 
+    	await changeColor(j, "rgba(252, 219, 3, 0.8)")
+    	// If current element is smaller than the pivot 
         if (arr[j] <= pivot) 
         { 
             i++; // increment index of smaller element 
@@ -204,10 +219,10 @@ async function partition(low, high){
             arr[j] = temp 
             shuffle(i, j)
             await sleep(sleepTime)
-	        changeColor(i, "rgba(66, 134, 244, 0.8)")
+	        await changeColor(i, "rgba(66, 134, 244, 0.8)")
         }else{
         	await sleep(sleepTime)
-        	changeColor(j, "rgba(66, 134, 244, 0.8)")
+        	await changeColor(j, "rgba(66, 134, 244, 0.8)")
         }	 
         
     } 
@@ -234,5 +249,6 @@ async function quick(low, high){
 }
 
 async function quickSort(){
+	document.getElementById("sortTitle").innerHTML = "Quick Sort"
 	await quick(0, arr.length-1)
 }
