@@ -1,5 +1,6 @@
-var arr = new Array(50);
+var arr = new Array(300);
 var sleepTime = -23.9877 +(106022800 - -23.9877)/(1+Math.pow(arr.length/0.00001042917, 0.9375706))
+//var sleepTime = 5000	
 function drawMaterial() {
 	var width = -2.494404 + (40784360 - -2.494404)/(1 + Math.pow(arr.length/0.0000106484, 0.9375706))
 	for (var itr = 0; itr < arr.length; itr++) {
@@ -159,12 +160,12 @@ async function merge(start, mid, end) {
 	// copy temp to original interval
 	for(i = start; i <= end; i += 1) {
 		arr[i] = temp[i - start]
-		//console.log(arr[i]+" "+temp[i - start])
 		changeColor(i, "rgba(66, 245, 167, 0.8)")
 		changeValue(i, arr[i])
 		await sleep(sleepTime);
 	}
 }
+
 
 // Arr is an array of integer type
 // start and end are the starting and ending index of current interval of Arr
@@ -183,3 +184,55 @@ async function mergeSort(){
 	await divide(0, arr.length-1)
 }
 
+async function partition(low, high){
+	if(low === high){
+		changeColor(j, "rgba(252, 219, 3, 0.8)")
+		await sleep(sleepTime)
+		changeColor(i, "rgba(66, 134, 244, 0.8)")
+	}
+	var pivot = arr[high]; // pivot 
+    var i = (low - 1); // Index of smaller element and indicates the right position of pivot found so far
+ 	for (var j = low; j <= high - 1; j++) 
+    { 
+    	changeColor(j, "rgba(252, 219, 3, 0.8)")
+        // If current element is smaller than the pivot 
+        if (arr[j] <= pivot) 
+        { 
+            i++; // increment index of smaller element 
+            var temp = arr[i]
+            arr[i] = arr[j]
+            arr[j] = temp 
+            shuffle(i, j)
+            await sleep(sleepTime)
+	        changeColor(i, "rgba(66, 134, 244, 0.8)")
+        }else{
+        	await sleep(sleepTime)
+        	changeColor(j, "rgba(66, 134, 244, 0.8)")
+        }	 
+        
+    } 
+    var temp = arr[i+1]
+    arr[i+1] = arr[high]
+    arr[high] = temp
+    shuffle(i+1, high)
+    return (i + 1); 
+}
+
+async function quick(low, high){
+	if (low <= high) 
+    { 
+        /* pi is partitioning index, arr[p] is now 
+        at right place */
+        var pi = await partition(low, high); 
+ 		changeColor(pi, "rgba(66, 245, 167, 0.8)")
+    
+        // Separately sort elements before 
+        // partition and after partition 
+        await quick(low, pi - 1); 
+        await quick(pi + 1, high); 
+    }
+}
+
+async function quickSort(){
+	await quick(0, arr.length-1)
+}

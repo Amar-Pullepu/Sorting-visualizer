@@ -38,7 +38,7 @@
               </div>
             </div></li>
           <li class="nav-item">
-            <a class="nav-link waves-effect" onclick="mergeSort();">
+            <a class="nav-link waves-effect" onclick="quickSort();">
               <span class="clearfix d-none d-sm-inline-block"> Sort!! </span>
             </a>
           </li>
