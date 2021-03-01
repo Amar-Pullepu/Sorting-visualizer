@@ -1,0 +1,179 @@
+var arr = new Array(50);
+var sleepTime = -23.9877 +(106022800 - -23.9877)/(1+Math.pow(arr.length/0.00001042917, 0.9375706))
+function drawMaterial() {
+	var width = -2.494404 + (40784360 - -2.494404)/(1 + Math.pow(arr.length/0.0000106484, 0.9375706))
+	for (var itr = 0; itr < arr.length; itr++) {
+		arr[itr] = (Math.random() * 500)^0;
+		document.getElementById("bodyContainer").innerHTML += '<div id="'+itr+'" style="height: '+arr[itr]+'px; width: '+width+'px; margin-left: auto; margin-right: auto; background-color: rgba(66, 134, 244, 0.8); color: transparent; font-size: 8px;"/>';
+	}
+}
+drawMaterial();
+
+function shuffle(x, y){
+	var l = document.getElementById(x).style.height;
+	var r = document.getElementById(y).style.height;
+	var lColor = document.getElementById(x).style.backgroundColor;
+	var rColor = document.getElementById(y).style.backgroundColor;
+	
+	document.getElementById(x).style.height = r;
+	document.getElementById(y).style.height = l;
+	
+	document.getElementById(x).style.backgroundColor = rColor;
+	document.getElementById(y).style.backgroundColor = lColor;
+}
+
+function changeValue(idx, value){
+	document.getElementById(idx).style.height = value;
+}
+
+function changeColor(idx, color){
+	document.getElementById(idx).style.backgroundColor = color;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function insertionSort(){
+	var n = arr.length;
+    for (var i = 1; i < n; ++i) {
+		var key = arr[i];
+		document.getElementById(i).style.backgroundColor = "rgba(252, 219, 3, 0.8)"; // Yellow Color
+        var j = i - 1;
+ 
+        /* Move elements of arr[0..i-1], that are
+			greater than key, to one position ahead
+            of their current position */
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            shuffle(j+1, j);
+            await sleep(sleepTime);
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+        document.getElementById(j+1).style.backgroundColor = "rgba(66, 134, 244, 0.8)"; //Blue Color
+    }
+}
+
+async function selectionSort(){
+	var n = arr.length;
+    
+	for (var i = 0; i < n; i++) 
+        { 
+        // Find the minimum element in unsorted array 
+        var min_idx = i; 
+        changeColor(min_idx, "rgba(66, 245, 167, 0.8)")
+        for (var j = i+1; j < n; j++) {
+        	changeColor(j, "rgba(252, 219, 3, 0.8)")
+        	if (arr[j] < arr[min_idx]) {
+	        	changeColor(min_idx, "rgba(66, 134, 244, 0.8)")
+    		    min_idx = j; 
+    		    changeColor(min_idx, "rgba(66, 245, 167, 0.8)")
+    		    await sleep(sleepTime);
+        	} else{
+        		await sleep(sleepTime);
+        		changeColor(j, "rgba(66, 134, 244, 0.8)")
+        	}
+        	
+        }
+            
+        // Swap the found minimum element with the first 
+        // element 
+        shuffle(min_idx, i)
+        var temp = arr[min_idx]; 
+        arr[min_idx] = arr[i]; 
+        arr[i] = temp; 
+    }
+}
+
+async function bubbleSort() 
+{ 
+    var n = arr.length; 
+    for (var i = 0; i < n; i++) {
+    	changeColor(0, "rgba(66, 245, 167, 0.8)")
+    	
+        for (var j = 0; j < n-i-1; j++) 
+            if (arr[j] > arr[j+1]) 
+            { 
+            	shuffle(j, j+1)
+                // swap arr[j+1] and arr[j] 
+                var temp = arr[j]; 
+                arr[j] = arr[j+1]; 
+                arr[j+1] = temp; 
+                await sleep(sleepTime);
+            } else{
+            	changeColor(j+1, "rgba(66, 245, 167, 0.8)") // green
+            	changeColor(j, "rgba(66, 134, 244, 0.8)") // blue
+            }
+	}
+}
+
+async function merge(start, mid, end) {
+
+	// create a temp array
+	var temp = new Array(end - start + 1);
+
+	// crawlers for both intervals and for temp
+	var i = start, j = mid+1, k = 0;
+	changeColor(i, "rgba(252, 219, 3, 0.8)")
+	changeColor(j, "rgba(252, 219, 3, 0.8)")
+	// traverse both arrays and in each iteration add smaller of both elements in temp 
+	while(i <= mid && j <= end) {
+		if(arr[i] <= arr[j]) {
+			temp[k] = arr[i];
+			changeColor(i, "rgba(66, 134, 244, 0.8)")
+			k += 1; i += 1;
+			changeColor(i, "rgba(252, 219, 3, 0.8)")
+		}
+		else {
+			temp[k] = arr[j];
+			changeColor(j, "rgba(66, 134, 244, 0.8)")
+			k += 1; j += 1;
+			changeColor(j, "rgba(252, 219, 3, 0.8)")
+		}
+		await sleep(sleepTime);
+	}
+
+	// add elements left in the first interval 
+	while(i <= mid) {
+		temp[k] = arr[i];
+		changeColor(i, "rgba(66, 134, 244, 0.8)")
+		k += 1; i += 1;
+		changeColor(i, "rgba(252, 219, 3, 0.8)")
+		await sleep(sleepTime);
+	}
+
+	// add elements left in the second interval 
+	while(j <= end) {
+		changeColor(j, "rgba(66, 134, 244, 0.8)")
+		k += 1; j += 1;
+		changeColor(j, "rgba(252, 219, 3, 0.8)")
+		await sleep(sleepTime);
+	}
+
+	// copy temp to original interval
+	for(i = start; i <= end; i += 1) {
+		changeColor(i, "rgba(66, 245, 167, 0.8)")
+		arr[i] = temp[i - start]
+		changeValue(i, arr[i])
+		await sleep(sleepTime);
+	}
+}
+
+// Arr is an array of integer type
+// start and end are the starting and ending index of current interval of Arr
+
+async function divide(start, end) {
+
+	if(start < end) {
+		var mid = (start + end) / 2;
+		divide(start, mid);
+		divide(mid+1, end);
+		merge(start, mid, end);
+	}
+}
+
+async function mergeSort(){
+	console.log("I'm Called!")
+	divide(0, arr.length)
+}
