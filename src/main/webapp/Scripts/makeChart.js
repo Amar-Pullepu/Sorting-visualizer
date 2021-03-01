@@ -23,11 +23,16 @@ function shuffle(x, y){
 }
 
 function changeValue(idx, value){
-	document.getElementById(idx).style.height = value;
+	document.getElementById(idx).style.height = value+"px";
 }
 
 function changeColor(idx, color){
-	document.getElementById(idx).style.backgroundColor = color;
+	try {
+		document.getElementById(idx).style.backgroundColor = color;
+	}
+	catch(err) {
+	  console.log(idx);
+	}
 }
 
 function sleep(ms) {
@@ -112,7 +117,7 @@ async function merge(start, mid, end) {
 
 	// create a temp array
 	var temp = new Array(end - start + 1);
-
+	
 	// crawlers for both intervals and for temp
 	var i = start, j = mid+1, k = 0;
 	changeColor(i, "rgba(252, 219, 3, 0.8)")
@@ -123,13 +128,13 @@ async function merge(start, mid, end) {
 			temp[k] = arr[i];
 			changeColor(i, "rgba(66, 134, 244, 0.8)")
 			k += 1; i += 1;
-			changeColor(i, "rgba(252, 219, 3, 0.8)")
+			if(i <= mid)	changeColor(i, "rgba(252, 219, 3, 0.8)")
 		}
 		else {
 			temp[k] = arr[j];
 			changeColor(j, "rgba(66, 134, 244, 0.8)")
 			k += 1; j += 1;
-			changeColor(j, "rgba(252, 219, 3, 0.8)")
+			if(j <= end)	changeColor(j, "rgba(252, 219, 3, 0.8)")
 		}
 		await sleep(sleepTime);
 	}
@@ -139,22 +144,23 @@ async function merge(start, mid, end) {
 		temp[k] = arr[i];
 		changeColor(i, "rgba(66, 134, 244, 0.8)")
 		k += 1; i += 1;
-		changeColor(i, "rgba(252, 219, 3, 0.8)")
+		if(i <= mid) changeColor(i, "rgba(252, 219, 3, 0.8)")
 		await sleep(sleepTime);
 	}
 
 	// add elements left in the second interval 
 	while(j <= end) {
+		temp[k] = arr[j];
 		changeColor(j, "rgba(66, 134, 244, 0.8)")
 		k += 1; j += 1;
-		changeColor(j, "rgba(252, 219, 3, 0.8)")
+		if(j <= end) changeColor(j, "rgba(252, 219, 3, 0.8)")
 		await sleep(sleepTime);
 	}
-
 	// copy temp to original interval
 	for(i = start; i <= end; i += 1) {
-		changeColor(i, "rgba(66, 245, 167, 0.8)")
 		arr[i] = temp[i - start]
+		//console.log(arr[i]+" "+temp[i - start])
+		changeColor(i, "rgba(66, 245, 167, 0.8)")
 		changeValue(i, arr[i])
 		await sleep(sleepTime);
 	}
@@ -166,14 +172,14 @@ async function merge(start, mid, end) {
 async function divide(start, end) {
 
 	if(start < end) {
-		var mid = (start + end) / 2;
-		divide(start, mid);
-		divide(mid+1, end);
-		merge(start, mid, end);
+		var mid = (start + end) >> 1;
+		await divide(start, mid);
+		await divide(mid+1, end);
+		await merge(start, mid, end);
 	}
 }
 
 async function mergeSort(){
-	console.log("I'm Called!")
-	divide(0, arr.length)
+	await divide(0, arr.length-1)
 }
+
